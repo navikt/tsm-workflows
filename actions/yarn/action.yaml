@@ -1,0 +1,26 @@
+name: "Setup node 24, enables corepack for yarn, and install deps immutably"
+description: "Requires 'secrets: inherit' - Sets up Node.js 24, enables corepack for yarn, and installs dependencies immutably"
+
+inputs:
+  READER_TOKEN:
+    description: 'NPM authentication token (usually secrets.READER_TOKEN)'
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - id: corepack
+      shell: bash
+      run: corepack enable
+    - uses: actions/setup-node@v5
+      id: setup-node
+      with:
+        node-version: 24
+        cache: yarn
+    - id: set-env
+      shell: bash
+      run: echo "NPM_AUTH_TOKEN=${{ inputs.READER_TOKEN }}" >> $GITHUB_ENV
+    - id: yarn-install
+      shell: bash
+      run: yarn --immutable
