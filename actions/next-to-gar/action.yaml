@@ -1,0 +1,51 @@
+name: "Builds nextjs app for appropriate environment and uploads the docker image to GAR"
+description: "Assumes it follows the structure of per-env .env files in .nais/envs/, standalone output with CDN-able static files"
+
+inputs:
+  app:
+    required: true
+    type: string
+  env:
+    required: true
+    type: string
+  build-command:
+    required: false
+    default: "yarn build"
+    type: string
+  GITHUB_TOKEN:
+    description: 'GitHub authentication token (usually secrets.GITHUB_TOKEN)'
+    required: true
+    type: string
+outputs:
+  image:
+    description: "Docker image in GAR"
+    value: ${{ steps.docker-build-push.outputs.image }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Copy appropriate env file to root
+      shell: bash
+      run: |
+        echo "Copying .nais/envs/.env.${{ inputs.env }}..."
+        cp .nais/envs/.env.${{ inputs.env }} .env.production
+    - id: yarn-build
+      shell: bash
+      run: ${{ inputs.build-command }}
+      env:
+        NEXT_PUBLIC_VERSION: ${{ github.sha }}
+    - name: Upload static files to NAV CDN
+      uses: nais/deploy/actions/cdn-upload/v2@master
+      with:
+        team: tsm
+        source: ./.next/static
+        destination: "/${{ inputs.app }}/_next"
+    - name: Push docker image to GAR
+      uses: nais/docker-build-push@v0
+      env:
+        ACTIONS_RUNTIME_TOKEN: ${{ inputs.GITHUB_TOKEN  }}
+        DOCKER_BUILD_SUMMARY: false
+      id: docker-build-push
+      with:
+        team: tsm
+        image_suffix: ${{ inputs.env }}
