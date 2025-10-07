@@ -8,6 +8,10 @@ inputs:
   env:
     required: true
     type: string
+  team:
+    required: false
+    default: "tsm"
+    type: string
   build-command:
     required: false
     default: "yarn build"
@@ -37,7 +41,7 @@ runs:
     - name: Upload static files to NAV CDN
       uses: nais/deploy/actions/cdn-upload/v2@master
       with:
-        team: tsm
+        team: ${{ inputs.team }}
         source: ./.next/static
         destination: "/${{ inputs.app }}/_next"
     - name: Push docker image to GAR
@@ -47,5 +51,5 @@ runs:
         DOCKER_BUILD_SUMMARY: false
       id: docker-build-push
       with:
-        team: tsm
+        team: ${{ inputs.team }}
         image_suffix: ${{ inputs.env }}

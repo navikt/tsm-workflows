@@ -45,7 +45,7 @@ runs:
     - name: Upload HTML report to CDN
       uses: nais/deploy/actions/cdn-upload/v2@master
       with:
-        team: tsm
+        team: ${{ inputs.team }}
         source: playwright-report
         destination: /${{ github.repository }}/${{ github.run_number }}
     - name: Make fancy GHA Summary
