@@ -1,0 +1,39 @@
+name: "Checks out, builds and puts NextJS app in GAR, using yarn"
+description: "For more fine grained control, use next-to-gar directly"
+
+inputs:
+  app:
+    required: true
+    type: string
+  env:
+    required: true
+    type: string
+  team:
+    required: false
+    default: "tsm"
+    type: string
+  GITHUB_TOKEN:
+    description: 'GitHub authentication token (usually secrets.GITHUB_TOKEN)'
+    required: true
+    type: string
+
+outputs:
+  image:
+    description: "Docker image in GAR"
+    value: ${{ steps.build-and-publish.outputs.image }}
+
+runs:
+  using: composite
+  steps:
+      - uses: actions/checkout@v5
+      - uses: navikt/tsm-workflows/actions/yarn@main
+        with:
+          READER_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      - uses: navikt/tsm-workflows/actions/next/next-to-gar@main
+        id: build-and-publish
+        with:
+          app: ${{ inputs.app }}
+          env: ${{ inputs.env }}
+          team: ${{ inputs.team }}
+          build-command: 'yarn build'
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
