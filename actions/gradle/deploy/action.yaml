@@ -1,0 +1,23 @@
+name: "Deploy to nais"
+
+inputs:
+  image:
+    required: true
+    type: string
+  env:
+    required: true
+    type: string
+  nais-resource:
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Deploy to nais
+      id: deploy_to_nais
+      uses: nais/deploy/actions/deploy@v2
+      env:
+        CLUSTER: ${{ inputs.env }}
+        RESOURCE: ${{ inputs.nais-resource }}
+        VAR: image=${{ inputs.image }}
