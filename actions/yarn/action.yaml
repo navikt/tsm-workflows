@@ -6,6 +6,10 @@ inputs:
     description: 'NPM authentication token (usually secrets.READER_TOKEN)'
     required: true
     type: string
+  workspace:
+    description: Install dependencien for specific workspace
+    required: false
+    type: string
 
 runs:
   using: "composite"
@@ -13,7 +17,7 @@ runs:
     - id: corepack
       shell: bash
       run: corepack enable
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       id: setup-node
       with:
         node-version: 24
@@ -23,4 +27,10 @@ runs:
       run: echo "NPM_AUTH_TOKEN=${{ inputs.READER_TOKEN }}" >> $GITHUB_ENV
     - id: yarn-install
       shell: bash
-      run: yarn --immutable
+      run: |
+        if [ -n "${{ inputs.workspace }}" ]; then
+          echo "inputs.workspace is set to '${{ inputs.workspace }}', installing dependencies for that workspace only"
+          yarn workspaces focus ${{ inputs.workspace }}
+        else
+            yarn install --immutable
+        fi
