@@ -7,6 +7,10 @@ inputs:
   shardTotal:
     required: true
     type: string
+  workspace:
+    required: false
+    type: string
+    default: "."
 
 runs:
   using: "composite"
@@ -28,10 +32,11 @@ runs:
     - name: Run Playwright
       shell: bash
       run: yarn e2e --shard=${{ inputs.shardIndex }}/${{ inputs.shardTotal }}
+      working-directory: ${{ inputs.workspace }}
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: blob-report-${{ inputs.shardIndex }}
-        path: blob-report
+        path: ${{ inputs.workspace }}/blob-report
         retention-days: 1
