@@ -25,6 +25,9 @@ outputs:
   image:
     description: "Docker image in GAR"
     value: ${{ steps.build-and-publish.outputs.image }}
+  digest:
+    description: "Docker image digest in GAR"
+    value: ${{ steps.build-and-publish.outputs.digest }}
 
 runs:
   using: composite
