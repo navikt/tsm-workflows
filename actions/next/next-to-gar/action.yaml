@@ -20,6 +20,10 @@ inputs:
     description: 'GitHub authentication token (usually secrets.GITHUB_TOKEN)'
     required: true
     type: string
+  salsa:
+    description: "Enable image attestation for SLSA, defaults to true"
+    required: false
+    default: "true"
 outputs:
   image:
     description: "Docker image in GAR"
@@ -53,3 +57,4 @@ runs:
       with:
         team: ${{ inputs.team }}
         image_suffix: ${{ inputs.env }}
+        salsa: ${{ inputs.salsa }}
