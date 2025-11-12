@@ -42,6 +42,12 @@ runs:
         key: ${{ runner.os }}-nextjs-${{ hashFiles('src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx') }}
         restore-keys: |
           ${{ runner.os }}-nextjs-
+    - name: Generate timestamp
+      id: ts
+      shell: bash
+      run: |
+        TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+        echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
     - name: Copy appropriate env file to root
       shell: bash
       run: |
@@ -52,6 +58,7 @@ runs:
       run: ${{ inputs.build-command }}
       env:
         NEXT_PUBLIC_VERSION: ${{ github.sha }}
+        NEXT_PUBLIC_BUILD_TIME: ${{ steps.ts.outputs.timestamp }}
     - name: Upload static files to NAV CDN
       uses: nais/deploy/actions/cdn-upload/v2@master
       with:
