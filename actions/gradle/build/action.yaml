@@ -11,11 +11,18 @@ inputs:
   GITHUB_TOKEN:
     required: true
     type: string
+  salsa:
+    description: "Enable image attestation for SLSA, defaults to true"
+    required: false
+    default: "true"
 
 outputs:
   image:
     description: "Docker image in GAR"
     value: ${{ steps.docker-build-push.outputs.image }}
+  digest:
+    description: "Docker image digest in GAR"
+    value: ${{ steps.docker-build-push.outputs.digest }}
 
 runs:
   using: composite
@@ -37,5 +44,6 @@ runs:
       id: docker-build-push
       with:
         team: ${{ inputs.team }}
+        salsa: ${{ inputs.salsa }}
       env:
         ACTIONS_RUNTIME_TOKEN: ${{ inputs.GITHUB_TOKEN  }}
