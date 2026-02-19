@@ -20,6 +20,10 @@ inputs:
     description: "Enable image attestation for SLSA"
     required: false
     default: "true"
+  server-actions-encryption-key:
+    description: "Encryption key for Next.js Server Actions, should be a 32-byte base64 string"
+    required: false
+    type: string
 
 outputs:
   image:
@@ -45,3 +49,4 @@ runs:
           build-command: 'yarn build'
           GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
           salsa: ${{ inputs.salsa }}
+          server-actions-encryption-key: ${{ inputs.server-actions-encryption-key }}

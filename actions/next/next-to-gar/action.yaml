@@ -24,6 +24,10 @@ inputs:
     description: "Enable image attestation for SLSA, defaults to true"
     required: false
     default: "true"
+  server-actions-encryption-key:
+    description: "Encryption key for Next.js Server Actions, should be a 32-byte base64 string"
+    required: false
+    type: string
 outputs:
   image:
     description: "Docker image in GAR"
@@ -59,6 +63,7 @@ runs:
       env:
         NEXT_PUBLIC_VERSION: ${{ github.sha }}
         NEXT_PUBLIC_BUILD_TIME: ${{ steps.ts.outputs.timestamp }}
+        NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ inputs.server-actions-encryption-key }}
     - name: Upload static files to NAV CDN
       uses: nais/deploy/actions/cdn-upload/v2@master
       with:
