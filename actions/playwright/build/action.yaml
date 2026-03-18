@@ -15,7 +15,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: navikt/tsm-workflows/actions/yarn@main
       with:
         READER_TOKEN: ${{ inputs.GITHUB_TOKEN }}
