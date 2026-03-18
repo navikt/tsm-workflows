@@ -12,7 +12,7 @@ runs:
     - id: corepack
       shell: bash
       run: corepack enable
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       id: setup-node
       with:
         node-version: 24
@@ -37,7 +37,7 @@ runs:
         EOF
         yarn dlx playwright merge-reports --config=playwright.merge.ts  ./all-blob-reports
     - name: Upload HTML report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: html-report-attempt-${{ github.run_attempt }}
         path: playwright-report
