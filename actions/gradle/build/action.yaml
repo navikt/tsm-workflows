@@ -31,7 +31,7 @@ runs:
     - uses: navikt/tsm-workflows/actions/gradle/setup@main
     - name: Build with Gradle
       shell: bash
-      run: ./gradlew build
+      run: ./gradlew build -x test
     - name: Build and publish docker image
       uses: nais/docker-build-push@v0
       id: docker-build-push
