@@ -1,0 +1,25 @@
+name: "Setup typst and copy the binary into typst-pdf/typst"
+description: "Setup typst and copy the binary into typst-pdf/typst"
+
+inputs:
+  typst-version:
+    description: "Version of typst to setup, e.g. 0.14.2"
+    required: true
+    type: string
+    default: 0.14.2
+  binary-path:
+    description: "Path to copy the typst binary to, relative to the repository root, e.g. typst-pdf/typst"
+    required: true
+    type: string
+    default: typst-pdf/typst
+
+runs:
+  using: composite
+  steps:
+    - name: "Setup typst"
+      uses: typst-community/setup-typst@v5
+      with:
+        typst-version: ${{ inputs.typst-version }}
+    - name: "Copy typst binary to ${{ inputs.binary-path }}"
+      shell: bash
+      run: cp $(which typst) ${{ inputs.binary-path }}
