@@ -3,7 +3,6 @@ name: "Test with Gradle"
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v6
     - uses: navikt/tsm-workflows/actions/gradle/setup@main
     - name: Build and test with Gradle
       shell: bash
