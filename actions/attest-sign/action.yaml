@@ -1,11 +1,8 @@
 name: "attest-sign"
 description: "Generate SBOM, attest and sign docker image"
 inputs:
-  image:
-    description: "Docker image reference"
-    required: true
-  digest:
-    description: "Docker image digest"
+  image_ref:
+    description: "Docker image reference with digest"
     required: true
   team:
     description: "Team"
@@ -25,4 +22,4 @@ runs:
       id: attest-sign
       uses: nais/attest-sign@v2
       with:
-        image_ref: ${{ inputs.image }}@${{ inputs.digest }}
+        image_ref: ${{ inputs.image_ref }}
