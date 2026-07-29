@@ -1,20 +1,17 @@
 name: "Build with Gradle, build dockerimage and publish to registry"
 
 inputs:
-  app:
-    required: true
-    type: string
   team:
     required: false
     default: "tsm"
-    type: string
-  GITHUB_TOKEN:
-    required: true
     type: string
   salsa:
     description: "Enable image attestation for SLSA, defaults to true"
     required: false
     default: "true"
+  GITHUB_TOKEN:
+    required: true
+    type: string
 
 outputs:
   image:
