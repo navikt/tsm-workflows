@@ -8,8 +8,23 @@ on:
         required: false
         type: string
         default: tsm
+      gradle:
+        description: Set to true for gradle projects to submit the dependency graph
+        required: false
+        type: boolean
+        default: false
 
 jobs:
+  gradle-dependency-submission:
+    name: Gradle dependencies
+    if: github.ref_name == 'main' && inputs.gradle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: navikt/tsm-workflows/actions/gradle/setup@main
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v6
+
   trivy:
     if: github.ref_name == 'main'
     timeout-minutes: 15
