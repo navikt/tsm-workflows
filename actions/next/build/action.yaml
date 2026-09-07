@@ -24,6 +24,11 @@ inputs:
     description: "Encryption key for Next.js Server Actions, should be a 32-byte base64 string"
     required: false
     type: string
+  disable-docker-cache:
+    description: "Disable Docker cache when building the image"
+    required: false
+    default: "false"
+    type: boolean
 
 outputs:
   image:
@@ -46,3 +51,4 @@ runs:
           GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
           salsa: ${{ inputs.salsa }}
           server-actions-encryption-key: ${{ inputs.server-actions-encryption-key }}
+          disable-docker-cache: ${{ inputs.disable-docker-cache }}

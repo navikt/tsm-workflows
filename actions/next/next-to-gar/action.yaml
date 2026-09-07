@@ -28,6 +28,12 @@ inputs:
     description: "Encryption key for Next.js Server Actions, should be a 32-byte base64 string"
     required: false
     type: string
+  disable-docker-cache:
+    description: "Disable Docker cache when building the image"
+    required: false
+    default: "false"
+    type: boolean
+
 outputs:
   image:
     description: "Docker image in GAR"
@@ -77,3 +83,4 @@ runs:
         team: ${{ inputs.team }}
         image_suffix: ${{ inputs.env }}
         salsa: ${{ inputs.salsa }}
+        no_cache: ${{ inputs.disable-docker-cache }}
