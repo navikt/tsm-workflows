@@ -1,5 +1,5 @@
-name: "Setup node 24, enables corepack for yarn, and install deps immutably"
-description: "Requires 'secrets: inherit' - Sets up Node.js 24, enables corepack for yarn, and installs dependencies immutably"
+name: "Setup node, enables corepack for yarn, and install deps immutably"
+description: "Requires 'secrets: inherit' - Sets up Node.js, enables corepack for yarn, and installs dependencies immutably"
 
 inputs:
   READER_TOKEN:
@@ -10,6 +10,10 @@ inputs:
     description: Install dependencien for specific workspace
     required: false
     type: string
+  node:
+    description: "Node version to use, defaults to 24"
+    required: false
+    default: "24"
 
 runs:
   using: "composite"
@@ -17,10 +21,10 @@ runs:
     - id: corepack
       shell: bash
       run: corepack enable
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       id: setup-node
       with:
-        node-version: 24
+        node-version: ${{ inputs.node }}
         cache: yarn
     - id: set-env
       shell: bash
